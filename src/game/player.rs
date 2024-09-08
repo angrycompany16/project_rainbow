@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::{math::vec2, prelude::*};
 
 #[derive(Component)]
@@ -16,13 +18,10 @@ impl Plugin for PlayerPlugin  {
 
 fn spawn_player(
     mut commands: Commands,
+    image_server: Res<AssetServer>
 ) {
     commands.spawn(SpriteBundle {
-        sprite: Sprite {
-            color: Color::linear_rgb(0.9, 1.0, 1.0),
-            custom_size: Some(vec2(100.0, 100.0)),
-            ..default()
-        },
+        texture: image_server.load("concept-art/export/player-concept.png"),
         ..default()
     })
     .insert(Player);
@@ -44,5 +43,5 @@ fn player_movement(
 
     let mut player_transform = player_q.get_single_mut().expect("More than one player in scene");
 
-    player_transform.translation += time.delta_seconds() * direction.extend(0.0) * 100.0;
+    player_transform.translation += time.delta_seconds() * direction.extend(0.0) * 150.0;
 }

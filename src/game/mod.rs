@@ -1,9 +1,11 @@
-use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
+use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*, render::view::RenderLayers};
 use iyes_perf_ui::prelude::*;
 
 mod player;
+mod camera;
 
 use player::PlayerPlugin;
+use camera::PixelCameraPlugin;
 
 pub struct GamePlugin;
 
@@ -21,6 +23,11 @@ impl Plugin for GamePlugin {
             .add_plugins(PlayerPlugin)
             .add_plugins(FrameTimeDiagnosticsPlugin)
             .add_plugins(PerfUiPlugin)
+            .add_plugins(PixelCameraPlugin {
+                pixel_scale_factor: 4,
+                screen_width: 1920,
+                screen_height: 1080,
+            })
 
             .add_systems(Startup, setup)
         ;
@@ -30,13 +37,6 @@ impl Plugin for GamePlugin {
 fn setup(
     mut commands: Commands,
 ) {
-    commands.spawn(Camera2dBundle {
-        camera: Camera {
-            clear_color: ClearColorConfig::Custom(Color::linear_rgb(0.05, 0.05, 0.05)),
-            ..default()
-        },
-        ..default()
-    });
-
+    
     commands.spawn(PerfUiCompleteBundle::default());
 }
